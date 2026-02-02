@@ -57,7 +57,7 @@ const Header = () => {
                     ))}
                     {!isLoggedIn ? (
                         <>
-                            <Link to='/login'><Button variant="contained" color="error" disableElevation>로그인</Button></Link>
+                            <Link to='/login'><Button variant="contained" style={{backgroundColor: '#f91f15'}} disableElevation>로그인</Button></Link>
                             <Link to='/register'><Button variant="outlined" disableElevation>회원가입</Button></Link>
                         </>
                     ) : (

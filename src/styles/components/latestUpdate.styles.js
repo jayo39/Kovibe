@@ -5,7 +5,6 @@ export const CustomLatestUpdate = styled.div`
     font-family: "Pretendard", sans-serif;
     font-size: 14px;
     font-weight: 500;
-    cursor: pointer;
     height: 58px;
     display: flex;
     align-items: center; 

@@ -69,7 +69,7 @@ const RegisterPage = () => {
 
     return (
         <CustomRegisterPage>
-            <div style={{display: 'flex', justifyContent: 'center', padding: '0 20px'}}>
+            <div style={{display: 'flex', justifyContent: 'center', padding: '0 20px', marginTop: '6rem'}}>
                 <Card variant="outlined" style={{width: '780px', padding: '20px'}}>
                     <CardContent style={{display: 'flex', flexDirection: 'column', gap: '12px'}}>
                         <div style={{fontSize: '22px', fontWeight: 'bold', marginBottom: '12px'}}>텔레그노시스 회원가입</div>

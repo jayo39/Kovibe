@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { CustomRankingTable } from "../styles/components/rankingTable.styles";
 
 const RankingTable = () => {
@@ -39,9 +40,11 @@ const RankingTable = () => {
                 </div>
                 <div className="fade-overlay" />
 
-                <div className="footer-button">
-                    실시간 인기 글 자세히보기
-                </div>
+                <Link to="/post" style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <div className="footer-button">
+                        실시간 인기 글 자세히보기
+                    </div>
+                </Link>
             </CustomRankingTable>
         </div>
     );

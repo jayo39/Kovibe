@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 export const CustomRegisterPage = styled.div`
     font-family: "Pretendard", sans-serif;
     color: #000;
+    margin: 6rem 0 6rem 0;
 
     input {
         box-sizing: border-box;

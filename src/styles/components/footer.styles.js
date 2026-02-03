@@ -7,4 +7,5 @@ export const CustomFooter = styled.footer`
     padding: 30px;
     background-color: #f9f9f9;
     text-align: center;
+    margin-top: 5rem;
 `;

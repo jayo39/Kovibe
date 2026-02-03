@@ -13,24 +13,16 @@ export const CustomSearchBar = styled.div`
         width: 100%;
     }
 
-    & .MuiInputBase-root.category {
-        border-radius: 100px;
-        background-color: white;
-        height: 52px;
-        width: 150px;
-        flex-shrink: 0;
-    }
-
     input.keyword {
         flex-grow: 1;
         transition: border-color 0.2s ease-in-out;
         outline: none;
-        font-size: 14px;
+        font-size: 13px;
         font-weight: 500;
         padding: 0 20px;
         border-radius: 100px;
         border: 2px solid #eeeeee;
-        height: 52px;
+        height: 40px;
         background-color: white;
         box-sizing: border-box;
     }

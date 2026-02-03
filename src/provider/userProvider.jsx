@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { createContext, useEffect, useState } from "react";
-import { jwtDecode } from "jwt-decode"; // npm install jwt-decode
+import { jwtDecode } from "jwt-decode";
 
 export const UserContext = createContext(null);
 
@@ -36,7 +36,7 @@ const UserProvider = (props) => {
                 }
             }
         };
-
+        setLoading(false);
         verifyUser();
     }, []);
 

@@ -30,7 +30,7 @@ const FooterLinks = () => {
                         </div>
                     ))}
                 </div>
-                <div style={{color: '#737373', fontWeight: '600', fontSize: '13px'}}>© 텔레그노시스 telegnosis</div>
+                <div style={{color: '#737373', fontWeight: '600', fontSize: '13px'}}>© 코바이브 KOVIBE</div>
             </div>
         </div>
     )

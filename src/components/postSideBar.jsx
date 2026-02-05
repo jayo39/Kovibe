@@ -2,24 +2,16 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import { CustomPostSideBar } from '../styles/components/postSideBar';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 
-import smallAd from "../assets/ads/ad1.png";
-
 const PostSideBar = () => {
 
     const posts = [
         { id: 1, title: "첫 번째 게시글", author: "user1", date: "2026-02-01" },
         { id: 2, title: "맥북에서 MySQL 설정하기", author: "user2", date: "2026-02-01" },
-        { id: 3, title: "123", author: "user2", date: "2026-02-01" },
-        { id: 4, title: "123", author: "user2", date: "2026-02-01" }    
-    ];
+        { id: 3, title: "123", author: "user2", date: "2026-02-01" }    ];
 
     return (
         <CustomPostSideBar>
-            <div className="ad-section">
-                <img src={smallAd} alt="Advertisement" />
-            </div>
-
-            <TableContainer component={Paper} style={{marginTop: '20px', boxShadow: 'none', border: '1px solid #e0e0e0' }}>
+            <TableContainer component={Paper} style={{ boxShadow: 'none', border: '1px solid #e0e0e0' }}>
                 <Table aria-label="post table">
                     <TableHead style={{ backgroundColor: '#f8f9fa' }}>
                         <TableRow>
@@ -53,7 +45,7 @@ const PostSideBar = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <TableContainer component={Paper} style={{marginTop: '20px', boxShadow: 'none', border: '1px solid #e0e0e0' }}>
+            <TableContainer component={Paper} style={{marginTop: '25px', boxShadow: 'none', border: '1px solid #e0e0e0' }}>
                 <Table aria-label="post table">
                     <TableHead style={{ backgroundColor: '#f8f9fa' }}>
                         <TableRow>

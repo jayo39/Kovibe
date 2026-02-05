@@ -8,7 +8,7 @@ const MainBanner = () => {
                 <span className="desktop-br"><br /></span>
                 <span className="mobile-br" />
                 커뮤니티 플랫폼, <span className="mobile-br" />
-                <span style={{ color: '#f44336' }}>텔레그노시스</span>
+                <span style={{ color: '#c32126' }}>코바이브</span>
             </h1>
             
             <p style={{ color: '#848a92', fontWeight: '500', fontSize: '16px' }}>

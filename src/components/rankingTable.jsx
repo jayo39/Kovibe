@@ -1,7 +1,27 @@
 import { Link } from "react-router-dom";
 import { CustomRankingTable } from "../styles/components/rankingTable.styles";
+import React, { useState, useEffect } from 'react';
 
 const RankingTable = () => {
+    const [currentTime, setCurrentTime] = useState(new Date());
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setCurrentTime(new Date());
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, []);
+
+    const formatDateTime = (date) => {
+        const yyyy = date.getFullYear();
+        const mm = String(date.getMonth() + 1).padStart(2, '0');
+        const dd = String(date.getDate()).padStart(2, '0');
+        const hh = String(date.getHours()).padStart(2, '0');
+        const min = String(date.getMinutes()).padStart(2, '0');
+        return `${yyyy}-${mm}-${dd} ${hh}:${min}`;
+    };
+
     const rankings = [
         { id: 1, text: "제목 1 입니다", status: "NEW" },
         { id: 2, text: "제목 2 입니다", status: "NEW" },
@@ -23,7 +43,7 @@ const RankingTable = () => {
                         <div>
                             <h2>실시간 인기 글</h2>
                         </div>
-                        <div>2026-02-01 03:00 기준</div>
+                        <div>{formatDateTime(currentTime)} 기준</div>
                     </div>
                 </div>
                 

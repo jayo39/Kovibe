@@ -6,7 +6,7 @@ import Content from './components/content.jsx'
 import RankingTable from './components/rankingTable.jsx'
 import Footer from './components/footer.jsx'
 import { UserContext } from "./provider/userProvider";
-import PostPage from './pages/post.jsx'
+import MainPage from './pages/main.jsx'
 
 function App() {
   const {user} = useContext(UserContext);
@@ -16,7 +16,7 @@ function App() {
       <div>
         <Header></Header>
         {isLoggedIn ? (
-             <PostPage/>) : 
+             <MainPage/>) : 
              (  <>
                   <LatestUpdate />
                   <MainBanner />

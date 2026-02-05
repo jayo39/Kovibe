@@ -6,37 +6,26 @@ export const UserContext = createContext(null);
 
 const UserProvider = (props) => {
     const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const token = localStorage.getItem('accessToken');
-        
-        if (!token) {
-            setUser(null);
-            return;
-        }
-        try {
-            const decoded = jwtDecode(token);
-            setUser(decoded);
-        } catch (e) {
-            localStorage.removeItem('accessToken');
-            setUser(null);
-        }
-
         const verifyUser = async () => {
+            const token = localStorage.getItem('accessToken');
+            if (!token) {
+                setLoading(false);
+                return;
+            }
             try {
                 let res = await axios.get('/api/auth/loggedIn', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
-                setUser(res.data); 
+                setUser(res.data);
             } catch (err) {
-                localStorage.removeItem('accessToken');
                 setUser(null);
-                if (err.response?.data?.errno === 2) {
-                    alert('세션이 만료되어 다시 로그인해 주세요.');
-                }
+            } finally {
+                setLoading(false);
             }
         };
-        setLoading(false);
         verifyUser();
     }, []);
 

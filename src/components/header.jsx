@@ -2,15 +2,15 @@ import React, { useState, useContext } from "react";
 import { Button, IconButton, Menu, MenuItem } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import ForumIcon from '@mui/icons-material/Forum';
-import { Link, useNavigate, useLocation } from "react-router-dom"; // Added useLocation
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { CustomHeader } from "../styles/components/header.styles";
 import logo from "../assets/logo.png";
 import { UserContext } from "../provider/userProvider";
+import EmailIcon from '@mui/icons-material/Email';
 
 const Header = () => {
     const navigate = useNavigate();
-    const location = useLocation(); // Hook to get current path
+    const location = useLocation();
     const { user, setUser } = useContext(UserContext);
     const isLoggedIn = Boolean(user);
     
@@ -27,7 +27,7 @@ const Header = () => {
 
     const allMenus = [
         { id: 1, title: '관리자 메뉴', path: '/admin', adminOnly: true, authRequired: true},
-        { id: 2, title: '게시판', path: '/', adminOnly: false, authRequired: true},
+        { id: 2, title: '게시판', path: '/post/1', adminOnly: false, authRequired: true},
         { id: 3, title: '시간표', path: '/schedule', adminOnly: false, authRequired: true},
         { id: 4, title: '친구', path: '/friend', adminOnly: false, authRequired: true}
     ];
@@ -41,7 +41,6 @@ const Header = () => {
     const handleLogout = () => {
         localStorage.removeItem('accessToken');
         setUser(null);
-        alert("로그아웃되었습니다.");
         handleCloseUserMenu();
         handleCloseMenu();
         navigate('/login');
@@ -57,7 +56,9 @@ const Header = () => {
 
                     <div className="nav-links">
                         {menus.map((el) => {
-                            const isActive = location.pathname === el.path;
+                            const isActive = el.path.startsWith('/post') 
+                                ? location.pathname.startsWith('/post') 
+                                : location.pathname === el.path;
 
                             return (
                                 <Link key={el.id} style={{ textDecoration: 'none' }} to={el.path}>
@@ -92,8 +93,8 @@ const Header = () => {
                             </>
                         ) : (
                             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                <IconButton style={{ padding: '8px' }}>
-                                    <ForumIcon style={{ fontSize: '28px', color: '#666' }} />
+                                <IconButton style={{ padding: '8px' }} component={Link} to="/message">
+                                    <EmailIcon style={{ fontSize: '28px', color: '#666' }} />
                                 </IconButton>
 
                                 <IconButton onClick={handleOpenUserMenu} style={{ padding: 0 }}>
@@ -109,7 +110,7 @@ const Header = () => {
                                     transformOrigin={{ vertical: 'top', horizontal: 'right' }}
                                 >
                                     <MenuItem onClick={() => { navigate('/profile'); handleCloseUserMenu(); }}>
-                                        프로필
+                                         내 정보
                                     </MenuItem>
                                     <MenuItem onClick={handleLogout} style={{ color: '#f91f15' }}>
                                         로그아웃

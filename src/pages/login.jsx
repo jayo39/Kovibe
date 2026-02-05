@@ -33,9 +33,13 @@ const LoginPage = () => {
                 });
                 const token = res.data.accessToken;
                 localStorage.setItem('accessToken', token);
-                const decoded = jwtDecode(token);
-                setUser(decoded);
-                alert('로그인되었습니다.');
+
+                if (res.data.user) {
+                    setUser(res.data.user); 
+                } else {
+                    const decoded = jwtDecode(token);
+                    setUser(decoded);
+                }
                 navigate('/', { replace: true });
             } catch(err) {
                 alert(err.response?.data?.msg || '로그인 실패');
@@ -60,7 +64,7 @@ const LoginPage = () => {
 
                                 <input name="pw" value={formik.values.pw} onChange={formik.handleChange} placeholder="비밀번호" type={'password'}></input>
 
-                                <Button type="submit" style={{borderRadius: '15px', backgroundColor: '#f91f15', color: '#fff', width: '100%', height: '54px'}}>텔레그노시스 로그인</Button>
+                                <Button type="submit" style={{borderRadius: '15px', backgroundColor: '#f91f15', color: '#fff', width: '100%', height: '54px'}}>코바이브 로그인</Button>
 
                                 <Link to="/register">
                                     <Button variant="outlined" style={{borderRadius: '15px', borderColor: '#ededed', color: '#737373', width: '100%', height: '54px'}}>회원가입</Button>

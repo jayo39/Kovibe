@@ -6,25 +6,36 @@ import App from './App.jsx'
 import LoginPage from './pages/login.jsx';
 import RegisterPage from './pages/register.jsx';
 import UserProvider from './provider/userProvider.jsx';
-import PostCUPage from './pages/postCU.jsx';
 import SchedulePage from './pages/schedule.jsx';
 import FriendPage from './pages/friend.jsx';
+import MessagePage from './pages/message.jsx';
 import AdminPage from './pages/admin.jsx';
+import PostPage from './pages/post.jsx'
+import ProfilePage from './pages/profile.jsx';
+import PostSinglePage from './pages/postSingle.jsx';
 import { withLogin, withLoginAndAdmin } from './hoc/hoc.jsx';
 
-const ProtectedPostCreate = withLogin(PostCUPage);
 const ProtectedSchedule = withLogin(SchedulePage);
 const ProtectedFriend = withLogin(FriendPage);
+const ProtectedMessage = withLogin(MessagePage);
+const ProtectedPost = withLogin(PostPage);
+const ProtectedProfile = withLogin(ProfilePage);
+const ProtectedSinglePost = withLogin(PostSinglePage)
+
+
 const ProtectedAdmin = withLoginAndAdmin(AdminPage);
 
 const router = createBrowserRouter([
   {path: "/", element: <App/>},
   {path: "/login", element: <LoginPage/>},
   {path: "/register", element: <RegisterPage/>},
-  {path: "/post/create", element: <ProtectedPostCreate/>},
   {path: "/schedule", element: <ProtectedSchedule/>},
   {path: "/friend", element: <ProtectedFriend/>},
-  {path: "/admin", element: <ProtectedAdmin/>}
+  {path: "/profile", element: <ProtectedProfile/>},
+  {path: "/message", element: <ProtectedMessage/>},
+  {path: "/post/:categoryId", element: <ProtectedPost/>},
+  {path: "/post/:categoryId/:postId", element: <ProtectedSinglePost/>},
+  {path: "/admin", element: <ProtectedAdmin/>},
 ]);
 
 createRoot(document.getElementById('root')).render(

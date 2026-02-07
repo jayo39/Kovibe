@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { EditorContainer } from "../styles/components/editorContainer";
 import { faPencil, faPaperclip } from '@fortawesome/free-solid-svg-icons';
@@ -6,13 +6,21 @@ import { UserContext } from "../provider/userProvider";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
-const PostEditor = ({ onCancel, onSave }) => {
+const PostEditor = ({initialData, onSave, onCancel, isEditMode}) => {
     const { user } = useContext(UserContext);
     const { categoryId } = useParams();
     
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [isAnonymous, setIsAnonymous] = useState(false);
+
+    useEffect(() => {
+        if (isEditMode && initialData) {
+            setTitle(initialData.title);
+            setContent(initialData.content);
+            setIsAnonymous(initialData.isAnonymous === 1);
+        }
+    }, [initialData, isEditMode]);
 
     const handleSubmit = async () => {
         if (!title.trim() || !content.trim()) {
@@ -21,15 +29,19 @@ const PostEditor = ({ onCancel, onSave }) => {
         }
 
         try {
-            const postData = {
-                title,
-                content,
-                userId: user.id,
-                categoryId: categoryId,
-                isAnonymous: isAnonymous ? 1 : 0 
-            };
-
-            await axios.post("/api/post/write", postData);
+            if(isEditMode) {
+                await axios.put(`/api/post/${initialData.id}`, { title, content, isAnonymous });
+            } else {
+                const postData = {
+                    title,
+                    content,
+                    userId: user.id,
+                    categoryId: categoryId,
+                    isAnonymous: isAnonymous ? 1 : 0 
+                };
+    
+                await axios.post("/api/post/write", postData);
+            }
             
             setTitle("");
             setContent("");

@@ -29,7 +29,8 @@ const Header = () => {
         { id: 1, title: '관리자 메뉴', path: '/admin', adminOnly: true, authRequired: true},
         { id: 2, title: '게시판', path: '/post/1', adminOnly: false, authRequired: true},
         { id: 3, title: '시간표', path: '/schedule', adminOnly: false, authRequired: true},
-        { id: 4, title: '친구', path: '/friend', adminOnly: false, authRequired: true}
+        { id: 4, title: '학점계산기', path: '/gpa', adminOnly: false, authRequired: true},
+        { id: 5, title: '친구', path: '/friend', adminOnly: false, authRequired: true}
     ];
 
     const menus = allMenus.filter(menu => {

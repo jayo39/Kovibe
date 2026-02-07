@@ -4,7 +4,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import { ProfileSidebarContainer } from "../styles/components/profileSideBar.js";
-import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
 import { useNavigate, Link } from "react-router-dom"; 
 import { UserContext } from "../provider/userProvider";
 import smallAd1 from "../assets/ads/ad1.png";
@@ -72,8 +72,8 @@ const ProfileSideBar = () => {
                     <Divider />
                     <ListItem disablePadding>
                         <ListItemButton sx={{ py: 1.2 }}>
-                            <ListItemIcon sx={{ minWidth: 35 }}><MailOutlineIcon sx={{ color: '#ffc107' }} fontSize="small" /></ListItemIcon>
-                            <ListItemText sx={{ textDecoration: 'none', '& .MuiTypography-root': { fontSize: '14px' } }} primary="내 쪽지함" />
+                            <ListItemIcon sx={{ minWidth: 35 }}><StarBorderIcon sx={{ color: '#ffc107' }} fontSize="small" /></ListItemIcon>
+                            <ListItemText sx={{ textDecoration: 'none', '& .MuiTypography-root': { fontSize: '14px' } }} primary="내 스크랩" />
                         </ListItemButton>
                     </ListItem>
                 </List>

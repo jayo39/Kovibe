@@ -1,4 +1,3 @@
-// mainBanner.styles.js
 import styled from "@emotion/styled";
 
 export const CustomMainBanner = styled.div`

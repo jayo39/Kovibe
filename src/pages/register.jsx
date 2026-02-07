@@ -16,7 +16,7 @@ const registerSchema = object({
     name: string().required('필수 항목입니다'),
     email: string().required('필수 항목입니다').email('올바른 이메일 형식이 아닙니다'),
     username: string().required('필수 항목입니다').max(30, '아이디는 30글자 이하여야 합니다.'),
-    pw: string().required('필수 항목입니다').min('4', '비밀번호는 최소 4자 이상 입력해 주세요.'),
+    pw: string().required('필수 항목입니다').min('6', '비밀번호는 최소 6자 이상 입력해 주세요.'),
     pwCheck: string().required('필수 항목입니다').oneOf([ref('pw'), null], '비밀번호가 일치하지 않습니다.').min('4', '비밀번호는 최소 4자 이상 입력해 주세요.')
 });
 

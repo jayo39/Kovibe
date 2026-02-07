@@ -13,6 +13,8 @@ import { Pagination } from '@mui/material';
 import Header from "../components/header";
 import axios from 'axios';
 import CategoryTitle from "../components/categoryTitle";
+import Footer from '../components/footer.jsx'
+import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 
 const PostPage = () => {
     const { categoryId } = useParams();
@@ -107,6 +109,14 @@ const PostPage = () => {
                                                     </Typography>
                                                 </Box>
                                             </TableCell>
+                                            <TableCell align="center">
+                                                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0.5 }}>
+                                                    <ChatBubbleOutlineIcon sx={{ fontSize: '18px', color: '#0589f5' }} />
+                                                    <Typography variant="caption" sx={{ fontWeight: 'bold' }}>
+                                                        {post.comment_count || 0}
+                                                    </Typography>
+                                                </Box>
+                                            </TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -140,6 +150,7 @@ const PostPage = () => {
                     <PostSideBar></PostSideBar>
                 </div>
             </PageMargin>
+            <Footer></Footer>
         </>
     )
 }

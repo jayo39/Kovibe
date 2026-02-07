@@ -15,7 +15,7 @@ app.use('/api/category', categoryRouter);
 app.use('/api/post', postRouter);
 
 app.get('/', (req, res) => {
-    res.send('Teleghnosis Backend Running!');
+    res.send('Kovibe Backend Running!');
 });
 
 app.listen(PORT, () => {

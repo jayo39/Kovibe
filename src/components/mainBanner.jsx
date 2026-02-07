@@ -4,7 +4,7 @@ const MainBanner = () => {
     return (
         <CustomMainBanner>
             <h1 style={{ letterSpacing: '-0.5px' }}>
-                캐나다 한인 <span className="mobile-br" /> 유학생을 위한
+                캐나다 <span className="mobile-br" /> 유학생을 위한
                 <span className="desktop-br"><br /></span>
                 <span className="mobile-br" />
                 커뮤니티 플랫폼, <span className="mobile-br" />

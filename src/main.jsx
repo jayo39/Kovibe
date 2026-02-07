@@ -14,14 +14,15 @@ import PostPage from './pages/post.jsx'
 import ProfilePage from './pages/profile.jsx';
 import PostSinglePage from './pages/postSingle.jsx';
 import { withLogin, withLoginAndAdmin } from './hoc/hoc.jsx';
+import GPAPage from './pages/gpa.jsx';
 
 const ProtectedSchedule = withLogin(SchedulePage);
 const ProtectedFriend = withLogin(FriendPage);
 const ProtectedMessage = withLogin(MessagePage);
 const ProtectedPost = withLogin(PostPage);
 const ProtectedProfile = withLogin(ProfilePage);
-const ProtectedSinglePost = withLogin(PostSinglePage)
-
+const ProtectedSinglePost = withLogin(PostSinglePage);
+const ProtectedGPA = withLogin(GPAPage);
 
 const ProtectedAdmin = withLoginAndAdmin(AdminPage);
 
@@ -33,6 +34,7 @@ const router = createBrowserRouter([
   {path: "/friend", element: <ProtectedFriend/>},
   {path: "/profile", element: <ProtectedProfile/>},
   {path: "/message", element: <ProtectedMessage/>},
+  {path: "/gpa", element: <ProtectedGPA/>},
   {path: "/post/:categoryId", element: <ProtectedPost/>},
   {path: "/post/:categoryId/:postId", element: <ProtectedSinglePost/>},
   {path: "/admin", element: <ProtectedAdmin/>},

@@ -24,7 +24,6 @@ export const CustomPostPage = styled.div`
         font-weight: 500;
         text-transform: none;
         height: 30px;
-        padding: 0 20px;
     }
 
     & .MuiTableCell-root {

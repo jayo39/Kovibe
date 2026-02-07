@@ -1,8 +1,15 @@
+import Footer from "../components/footer";
 import Header from "../components/header"
+import { PageMargin } from "../styles/pages/pageMargin";
 
 const FriendPage = () => {
     return (
-        <Header></Header>
+        <>
+            <Header></Header>
+            <PageMargin></PageMargin>
+            <Footer></Footer>
+        </>
+        
     )
 }
 

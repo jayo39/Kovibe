@@ -1,3 +1,4 @@
+import Footer from "../components/footer";
 import Header from "../components/header";
 import { PageMargin } from "../styles/pages/pageMargin";
 
@@ -8,6 +9,7 @@ const GPAPage = () => {
             <PageMargin>
                 
             </PageMargin>
+            <Footer></Footer>
         </>
     )
 }

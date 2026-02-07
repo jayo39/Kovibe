@@ -38,10 +38,11 @@ const SchedulePage = () => {
                                 <div key={time} className="time-cell">{time} 시</div>
                             ))}
                         </TimeColumn>
+                        <TimeIndicator startHour={9} />
 
                         {DAYS.map((_, dayIndex) => (
                             <DayColumn key={dayIndex}>
-                                {dayIndex === currentDayIndex && <TimeIndicator startHour={9} />}
+                                {dayIndex === currentDayIndex}
                                 {courses.filter(c => c.day === dayIndex).map(course => (
                                     <Box
                                         key={course.id}

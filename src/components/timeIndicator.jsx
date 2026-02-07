@@ -3,13 +3,20 @@ import { IndicatorLine } from '../styles/components/timeIndicator.styles';
 
 const TimeIndicator = ({ startHour = 9 }) => {
     const [topPosition, setTopPosition] = useState(-100);
+    const [currentDay, setCurrentDay] = useState(0);
 
     useEffect(() => {
         const calculatePosition = () => {
             const now = new Date();
             const hours = now.getHours();
             const minutes = now.getMinutes();
+            
+            const jsDay = now.getDay();
+            const dayIndex = jsDay === 0 ? 6 : jsDay - 1;
 
+            setCurrentDay(dayIndex);
+
+            // Show if between startHour and 10:59 PM
             if (hours >= startHour && hours < 23) {
                 const decimalTime = hours + minutes / 60;
                 const position = (decimalTime - startHour) * 60;
@@ -26,7 +33,7 @@ const TimeIndicator = ({ startHour = 9 }) => {
 
     if (topPosition < 0) return null;
 
-    return <IndicatorLine style={{ top: `${topPosition}px` }} />;
+    return <IndicatorLine currentDay={currentDay} style={{ top: `${topPosition}px` }} />;
 };
 
 export default TimeIndicator;

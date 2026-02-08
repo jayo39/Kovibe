@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { IndicatorLine } from '../styles/components/timeIndicator.styles';
 
-const TimeIndicator = ({ startHour = 9 }) => {
+const TimeIndicator = ({ startHour = 8 }) => {
     const [topPosition, setTopPosition] = useState(-100);
     const [currentDay, setCurrentDay] = useState(0);
 
@@ -16,7 +16,6 @@ const TimeIndicator = ({ startHour = 9 }) => {
 
             setCurrentDay(dayIndex);
 
-            // Show if between startHour and 10:59 PM
             if (hours >= startHour && hours < 23) {
                 const decimalTime = hours + minutes / 60;
                 const position = (decimalTime - startHour) * 60;

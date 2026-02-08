@@ -15,6 +15,8 @@ import ProfilePage from './pages/profile.jsx';
 import PostSinglePage from './pages/postSingle.jsx';
 import { withLogin, withLoginAndAdmin } from './hoc/hoc.jsx';
 import GPAPage from './pages/gpa.jsx';
+import PostPersonalPage from './pages/postPersonal.jsx';
+import InvalidPage from './pages/invalid.jsx';
 
 const ProtectedSchedule = withLogin(SchedulePage);
 const ProtectedFriend = withLogin(FriendPage);
@@ -23,6 +25,7 @@ const ProtectedPost = withLogin(PostPage);
 const ProtectedProfile = withLogin(ProfilePage);
 const ProtectedSinglePost = withLogin(PostSinglePage);
 const ProtectedGPA = withLogin(GPAPage);
+const ProtectedPostpersonal = withLogin(PostPersonalPage);
 
 const ProtectedAdmin = withLoginAndAdmin(AdminPage);
 
@@ -30,13 +33,15 @@ const router = createBrowserRouter([
   {path: "/", element: <App/>},
   {path: "/login", element: <LoginPage/>},
   {path: "/register", element: <RegisterPage/>},
-  {path: "/schedule", element: <ProtectedSchedule/>},
+  {path: "/schedule/:userId?", element: <ProtectedSchedule/>},
   {path: "/friend", element: <ProtectedFriend/>},
   {path: "/profile", element: <ProtectedProfile/>},
   {path: "/message", element: <ProtectedMessage/>},
   {path: "/gpa", element: <ProtectedGPA/>},
   {path: "/post/:categoryId", element: <ProtectedPost/>},
   {path: "/post/:categoryId/:postId", element: <ProtectedSinglePost/>},
+  {path: "/post/my/:type", element: <ProtectedPostpersonal/>},
+  {path: "*", element: <InvalidPage />},
   {path: "/admin", element: <ProtectedAdmin/>},
 ]);
 

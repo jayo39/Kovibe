@@ -1,5 +1,6 @@
 import express from 'express';
 import pool from '../db.js';
+import { loginRequired } from '../lib/utils.js';
 
 const router = express.Router();
 
@@ -77,8 +78,9 @@ router.get('/newest/sidebar', async (req, res) => {
     }
 });
 
-router.post('/write', async(req, res) => {
-    const { title, content, userId, categoryId, isAnonymous } = req.body;
+router.post('/write', loginRequired, async(req, res) => {
+    const { title, content, categoryId, isAnonymous } = req.body;
+    const userId = req.loginId;
     try {
         const sql = `
             INSERT INTO posts 
@@ -108,12 +110,14 @@ router.get('/:categoryId/:postId', async (req, res) => {
             SELECT p.*, c.name as categoryName,
             CASE WHEN p.isAnonymous = 1 THEN '익명(글쓴이)' ELSE u.name END as author,
             (SELECT COUNT(*) FROM post_likes WHERE post_id = p.id) as like_count,
-            EXISTS(SELECT 1 FROM post_likes WHERE post_id = p.id AND user_id = ?) as isLiked
+            (SELECT COUNT(*) FROM saved_posts WHERE post_id = p.id) as scrap_count,
+            EXISTS(SELECT 1 FROM post_likes WHERE post_id = p.id AND user_id = ?) as isLiked,
+            EXISTS(SELECT 1 FROM saved_posts WHERE post_id = p.id AND user_id = ?) as isScrapped
             FROM posts p
             JOIN users u ON p.user_id = u.id
             JOIN categories c ON p.category_id = c.id
             WHERE p.id = ?
-        `, [userId || null, postId]);
+        `, [userId || null, userId || null, postId]);
         
         if (postRows.length === 0) return res.status(404).json({ msg: "게시글을 찾을 수 없습니다." });
 
@@ -148,6 +152,7 @@ router.get('/:categoryId/:postId', async (req, res) => {
         res.json({ 
             ...postRows[0], 
             isLiked: !!postRows[0].isLiked, 
+            isScrapped: !!postRows[0].isScrapped,
             comments: commentRows 
         });
         
@@ -156,9 +161,9 @@ router.get('/:categoryId/:postId', async (req, res) => {
     }
 });
 
-router.post('/:postId/like', async (req, res) => {
+router.post('/:postId/like', loginRequired, async (req, res) => {
     const { postId } = req.params;
-    const { userId } = req.body;
+    const userId = req.loginId;
 
     if (!userId) return res.status(401).json({ msg: "로그인이 필요합니다." });
 
@@ -180,12 +185,13 @@ router.post('/:postId/like', async (req, res) => {
     }
 });
 
-router.put('/:postId', async (req, res) => {
+router.put('/:postId', loginRequired, async (req, res) => {
     const { title, content, isAnonymous } = req.body;
+    const userId = req.loginId;
     try {
         await pool.query(
-            "UPDATE posts SET title = ?, content = ?, isAnonymous = ? WHERE id = ?",
-            [title, content, isAnonymous, req.params.postId]
+            "UPDATE posts SET title = ?, content = ?, isAnonymous = ? WHERE id = ? AND user_id = ?",
+            [title, content, isAnonymous, req.params.postId, userId]
         );
         res.json({ msg: "수정 성공" });
     } catch (err) {
@@ -193,11 +199,12 @@ router.put('/:postId', async (req, res) => {
     }
 });
 
-router.delete('/:postId', async (req, res) => {
+router.delete('/:postId', loginRequired, async (req, res) => {
     const { postId } = req.params;
+    const userId = req.loginId;
     
     try {
-        const [result] = await pool.query("DELETE FROM posts WHERE id = ?", [postId]);
+        const [result] = await pool.query("DELETE FROM posts WHERE id = ? AND user_id = ?", [postId, userId]);
         
         if (result.affectedRows === 0) {
             return res.status(404).json({ msg: "삭제할 게시글을 찾을 수 없습니다." });
@@ -209,9 +216,10 @@ router.delete('/:postId', async (req, res) => {
     }
 });
 
-router.post('/:postId/comment', async (req, res) => {
+router.post('/:postId/comment', loginRequired, async (req, res) => {
     const { postId } = req.params;
-    const { content, userId, isAnonymous, parentId } = req.body;
+    const { content, isAnonymous, parentId } = req.body;
+    const userId = req.loginId;
 
     if (!content || !userId) {
         return res.status(400).json({ msg: "내용과 사용자 ID가 필요합니다." });
@@ -228,19 +236,20 @@ router.post('/:postId/comment', async (req, res) => {
     }
 });
 
-router.delete('/comment/:commentId', async (req, res) => {
+router.delete('/comment/:commentId', loginRequired, async (req, res) => {
     const { commentId } = req.params;
+    const userId = req.loginId;
     try {
-        await pool.query("DELETE FROM comments WHERE id = ?", [commentId]);
+        await pool.query("DELETE FROM comments WHERE id = ? AND user_id = ?", [commentId, userId]);
         res.status(200).json({ msg: "댓글 삭제 성공" });
     } catch (err) {
         res.status(500).json({ msg: "서버 오류" });
     }
 });
 
-router.post('/comment/:commentId/like', async (req, res) => {
+router.post('/comment/:commentId/like', loginRequired, async (req, res) => {
     const { commentId } = req.params;
-    const { userId } = req.body;
+    const userId = req.loginId;
 
     try {
         const [existing] = await pool.query(
@@ -260,5 +269,92 @@ router.post('/comment/:commentId/like', async (req, res) => {
     }
 });
 
+router.post('/:postId/scrap', loginRequired, async (req, res) => {
+    const { postId } = req.params;
+    const userId = req.loginId;
+
+    if (!userId) return res.status(401).json({ msg: "로그인이 필요합니다." });
+
+    try {
+        const [existing] = await pool.query(
+            "SELECT id FROM saved_posts WHERE user_id = ? AND post_id = ?",
+            [userId, postId]
+        );
+
+        if (existing.length > 0) {
+            await pool.query("DELETE FROM saved_posts WHERE user_id = ? AND post_id = ?", [userId, postId]);
+            return res.status(200).json({ scrapped: false, msg: "스크랩 취소" });
+        } else {
+            await pool.query("INSERT INTO saved_posts (user_id, post_id) VALUES (?, ?)", [userId, postId]);
+            return res.status(200).json({ scrapped: true, msg: "스크랩 성공" });
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ msg: "서버 오류" });
+    }
+});
+
+router.get('/favorite', loginRequired, async (req, res) => {
+    const userId = req.loginId
+    if (!userId) return res.status(401).json({ msg: "로그인이 필요합니다." });
+
+    try {
+        const [posts] = await pool.query(`
+            SELECT 
+                p.*, 
+                c.name as categoryName,
+                CASE WHEN p.isAnonymous = 1 THEN '익명' ELSE u.name END as author,
+                (SELECT COUNT(*) FROM post_likes WHERE post_id = p.id) as like_count,
+                (SELECT COUNT(*) FROM comments WHERE post_id = p.id) as comment_count
+            FROM posts p
+            JOIN saved_posts s ON p.id = s.post_id
+            JOIN users u ON p.user_id = u.id
+            JOIN categories c ON p.category_id = c.id
+            WHERE s.user_id = ?
+        `, [userId]);
+
+        res.json(posts);
+    } catch (err) {
+        console.error(err); // This will show the specific error in your terminal
+        res.status(500).json({ msg: "스크랩 목록을 불러오는데 실패했습니다.", error: err.message });
+    }
+});
+
+router.get('/wrote', loginRequired, async (req, res) => {
+    const userId = req.loginId;
+    try {
+        const [posts] = await pool.query(`
+            SELECT p.*, c.name as categoryName,
+            (SELECT COUNT(*) FROM post_likes WHERE post_id = p.id) as like_count,
+            (SELECT COUNT(*) FROM comments WHERE post_id = p.id) as comment_count,
+            CASE WHEN p.isAnonymous = 1 THEN '익명' ELSE u.name END as author
+            FROM posts p
+            JOIN categories c ON p.category_id = c.id
+            JOIN users u ON p.user_id = u.id
+            WHERE p.user_id = ?
+            ORDER BY p.created_at DESC
+        `, [userId]);
+        res.json(posts);
+    } catch (err) { res.status(500).json(err); }
+});
+
+router.get('/commented', loginRequired, async (req, res) => {
+    const userId = req.loginId;
+    try {
+        const [posts] = await pool.query(`
+            SELECT DISTINCT p.*, c.name as categoryName,
+            (SELECT COUNT(*) FROM post_likes WHERE post_id = p.id) as like_count,
+            (SELECT COUNT(*) FROM comments WHERE post_id = p.id) as comment_count,
+            CASE WHEN p.isAnonymous = 1 THEN '익명' ELSE u.name END as author
+            FROM posts p
+            JOIN comments com ON p.id = com.post_id
+            JOIN categories c ON p.category_id = c.id
+            JOIN users u ON p.user_id = u.id
+            WHERE com.user_id = ?
+            ORDER BY p.created_at DESC
+        `, [userId]);
+        res.json(posts);
+    } catch (err) { res.status(500).json(err); }
+});
 
 export default router;

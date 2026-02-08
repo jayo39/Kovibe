@@ -61,3 +61,56 @@ export const WritePostBar = styled.div`
         font-size: 16px;
     }
 `;
+
+export const PostItemContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    border: 1px solid #e3e3e3;
+    background-color: #fff;
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out;
+
+    &:hover {
+        background-color: #fafafa;
+    }
+
+    .category-label {
+        font-size: 12px;
+        color: #296EB5;
+        font-weight: bold;
+        margin-bottom: 4px;
+    }
+
+    .post-title {
+        font-weight: bold;
+        font-size: 16px;
+        color: #000;
+        margin-bottom: 4px;
+    }
+
+    .post-preview {
+        font-size: 14px;
+        color: #444;
+        margin-bottom: 8px;
+        line-height: 1.4;
+        
+        /* Truncate to 1 line */
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .post-meta {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 12px;
+        margin-top: 5px;
+
+        .stat-red { color: #f91f15; display: flex; align-items: center; gap: 2px; }
+        .stat-blue { color: #05b0ff; display: flex; align-items: center; gap: 2px; }
+        .meta-text { color: #888; }
+    }
+`;

@@ -7,6 +7,7 @@ export const UserContext = createContext(null);
 const UserProvider = (props) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [friendRefreshTrigger, setFriendRefreshTrigger] = useState(0);
 
     useEffect(() => {
         const verifyUser = async () => {
@@ -19,7 +20,7 @@ const UserProvider = (props) => {
                 let res = await axios.get('/api/auth/loggedIn', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
-                setUser(res.data);
+                setUser({...res.data, accessToken: token});
             } catch (err) {
                 setUser(null);
             } finally {
@@ -30,7 +31,7 @@ const UserProvider = (props) => {
     }, []);
 
     return (
-        <UserContext.Provider value={{ user, setUser }}>
+        <UserContext.Provider value={{ user, setUser, loading, friendRefreshTrigger, refreshFriends: () => setFriendRefreshTrigger(prev => prev + 1) }}>
             {props.children}
         </UserContext.Provider>
     );

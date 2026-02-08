@@ -6,7 +6,7 @@ import { Box } from '@mui/material';
 import banner1 from "../assets/ads/adbanner1.png";
 import ProfileSideBar from "../components/profileSideBar";
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from '../api/axios';
 
 const MainPage = () => {
     const [categories, setCategories] = useState([]);

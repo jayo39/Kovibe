@@ -1,5 +1,5 @@
 import SearchBar from "../components/searchBar";
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CustomPostPage, WritePostBar } from "../styles/pages/post.styles";
 import { Table, TableBody, TableCell, TableContainer, TableRow, Paper, Button, Typography, Box } from '@mui/material';
@@ -11,10 +11,11 @@ import PostEditor from "../components/postEditor";
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
 import { Pagination } from '@mui/material';
 import Header from "../components/header";
-import axios from 'axios';
+import axios from '../api/axios';
 import CategoryTitle from "../components/categoryTitle";
 import Footer from '../components/footer.jsx'
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
+import { UserContext } from "../provider/userProvider";
 
 const PostPage = () => {
     const { categoryId } = useParams();
@@ -25,6 +26,7 @@ const PostPage = () => {
     const postsPerPage = 10;
     const [refreshTrigger, setRefreshTrigger] = useState(0);
     const navigate = useNavigate();
+    const { user } = useContext(UserContext);
 
 
     const handleDataRefresh = () => {

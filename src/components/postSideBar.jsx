@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Typography, Box } from '@mui/material';
 import { CustomPostSideBar } from '../styles/components/postSideBar';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
-import axios from 'axios';
+import axios from '../api/axios';
 import { useNavigate } from 'react-router-dom';
 
 const PostSideBar = () => {

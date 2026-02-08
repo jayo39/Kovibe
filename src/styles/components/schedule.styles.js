@@ -7,7 +7,7 @@ export const ScheduleContainer = styled.div`
     flex-direction: column;
     width: 100%;
     max-width: 800px;
-    margin: 20px auto;
+    margin: auto;
     border: 1px solid #e3e3e3;
     box-shadow: none !important;
 `;
@@ -55,7 +55,7 @@ export const TimeColumn = styled.div`
 export const DayColumn = styled.div`
     border-left: 1px solid #eee;
     position: relative;
-    height: ${14 * 60}px; 
+    height: ${15 * 60}px; 
     
     background-image: linear-gradient(#eee 1px, transparent 1px);
     background-size: 100% 60px;

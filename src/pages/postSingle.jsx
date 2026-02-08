@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../api/axios';
 import Header from "../components/header";
 import PostSideBar from "../components/postSideBar";
 import CategoryTitle from "../components/categoryTitle";
@@ -21,6 +21,7 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import SubdirectoryArrowRightIcon from '@mui/icons-material/SubdirectoryArrowRight';
 import { CommentItem, CommentListContainer } from '../styles/components/comment.styles';
 import Footer from '../components/footer.jsx'
+import StarIcon from '@mui/icons-material/Star'; // Add this import at the top
 
 const PostSinglePage = () => {
     const { categoryId, postId } = useParams();
@@ -171,6 +172,30 @@ const PostSinglePage = () => {
         }
     };
 
+    const handleScrap = async () => {
+    if (!user) {
+        alert("로그인이 필요합니다.");
+        return;
+    }
+
+    try {
+        const previouslyScrapped = post.isScrapped;
+        setPost({
+            ...post,
+            isScrapped: !previouslyScrapped,
+            scrap_count: previouslyScrapped ? (post.scrap_count || 1) - 1 : (post.scrap_count || 0) + 1
+        });
+
+        await axios.post(`/api/post/${postId}/scrap`, { userId: user.id });
+
+    } catch (err) {
+        // If server fails, revert the UI by fetching details again
+        console.error("스크랩 처리에 실패했습니다.", err);
+        fetchPostDetail();
+        alert("스크랩 처리에 실패했습니다.");
+    }
+};
+
     if (loading) return null;
 
     const isAuthor = user && post && user.id === post.user_id;
@@ -222,9 +247,8 @@ const PostSinglePage = () => {
                                 <div className="post-stats">
                                     <div className="stat-item red"><ThumbUpOffAltIcon /> {post?.like_count}</div>
                                     <div className="stat-item blue"><ChatBubbleOutlineIcon /> {post?.comments?.length || 0}</div>
-                                    <div className="stat-item yellow"><StarBorderIcon /> 0</div>
+                                    <div className="stat-item yellow"><StarBorderIcon/>{post?.scrap_count || 0}</div>
                                 </div>
-
                                 <div className="button-group">
                                     <button 
                                         className={`action-btn ${post?.isLiked ? 'active' : ''}`} 
@@ -234,7 +258,16 @@ const PostSinglePage = () => {
                                         {post?.isLiked ? <ThumbUpIcon fontSize="small" /> : <ThumbUpOffAltIcon fontSize="small" />}
                                         공감
                                     </button>
-                                    <button className="action-btn"><StarBorderIcon fontSize="small" /> 스크랩</button>
+
+                                    {/* Updated Scrap Button */}
+                                    <button 
+                                        className={`action-btn ${post?.isScrapped ? 'active' : ''}`}
+                                        onClick={handleScrap}
+                                        style={{ color: post?.isScrapped ? '#ffbb00' : 'inherit' }} // Yellow color for scraps
+                                    >
+                                        {post?.isScrapped ? <StarIcon fontSize="small" /> : <StarBorderIcon fontSize="small" />} 
+                                        스크랩
+                                    </button>
                                 </div>
                             </PostDetailContainer>
                         )}

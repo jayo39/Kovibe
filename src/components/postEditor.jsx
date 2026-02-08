@@ -4,7 +4,7 @@ import { EditorContainer } from "../styles/components/editorContainer";
 import { faPencil, faPaperclip } from '@fortawesome/free-solid-svg-icons';
 import { UserContext } from "../provider/userProvider";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import axios from "../api/axios";
 
 const PostEditor = ({initialData, onSave, onCancel, isEditMode}) => {
     const { user } = useContext(UserContext);

@@ -1,7 +1,14 @@
 import jwt from 'jsonwebtoken';
 
 export const loginRequired = (req, res, next) => {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader) {
+        return res.status(401).json({ errno: 4, msg: '인증 토큰이 필요합니다.' });
+    }
+
     const token = req.headers.authorization.replace('Bearer ', '');
+
     try {
         let loginUser = jwt.verify(token, 'TLtoken');
         let loginUsername = loginUser.username;
@@ -12,7 +19,7 @@ export const loginRequired = (req, res, next) => {
         next();
     } catch(err) {
         if(err.name === 'JsonWebTokenError') {
-            res.status(500).json({errno:1, msg:'로그인 인증 실패.'});
+            res.status(401).json({errno:1, msg:'로그인 인증 실패.'});
             return;
         } else if (err.name === 'TokenExpiredError') {
             res.status(500).json({errno:2, msg:'세션이 만료되어 다시 로그인해 주세요.'});

@@ -76,4 +76,42 @@ router.get('/loggedIn', loginRequired, async(req, res) => {
     }
 });
 
+router.get('/user/:id', loginRequired, async (req, res) => {
+    const requesterId = req.loginId; // 로그인한 본인 ID
+    const targetId = req.params.id;  // 확인하려는 상대방 ID
+
+    try {
+        // 1. 본인이 본인 정보를 확인하는게 아니라면 친구인지 먼저 검사
+        if (parseInt(requesterId) !== parseInt(targetId)) {
+            const [friendship] = await pool.query(
+                `SELECT 1 FROM friendships 
+                 WHERE status = 'accepted' 
+                 AND ((requester_id = ? AND addressee_id = ?) 
+                      OR (requester_id = ? AND addressee_id = ?))`,
+                [requesterId, targetId, targetId, requesterId]
+            );
+
+            // 친구가 아니라면 403 에러 반환 (보안을 위해 메시지 통일)
+            if (friendship.length === 0) {
+                return res.status(403).json({ error: "요청하신 페이지는 없는 페이지 입니다." });
+            }
+        }
+
+        // 2. 친구 관계가 확인되었거나 본인인 경우에만 정보 조회
+        const [rows] = await pool.query(
+            'SELECT name, username FROM users WHERE id = ?', 
+            [targetId]
+        );
+
+        if (rows.length === 0) {
+            return res.status(404).json({ error: "사용자를 찾을 수 없습니다." });
+        }
+
+        res.json(rows[0]);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "서버 내부 오류가 발생했습니다." });
+    }
+});
+
 export default router;

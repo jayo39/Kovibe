@@ -3,6 +3,8 @@ import authRouter from './routers/authRouter.js';
 import schoolRouter from './routers/schoolRouter.js';
 import categoryRouter from './routers/categoryRouter.js';
 import postRouter from './routers/postRouter.js';
+import scheduleRouter from './routers/scheduleRouter.js';
+import friendRouter from './routers/friendRouter.js';
 
 const app = express();
 const PORT = 5001;
@@ -13,6 +15,8 @@ app.use('/api/auth', authRouter);
 app.use('/api/school', schoolRouter);
 app.use('/api/category', categoryRouter);
 app.use('/api/post', postRouter);
+app.use('/api/schedule', scheduleRouter);
+app.use('/api/friend', friendRouter);
 
 app.get('/', (req, res) => {
     res.send('Kovibe Backend Running!');

@@ -56,14 +56,14 @@ const ProfileSideBar = () => {
 
             <Paper variant="outlined" sx={{ borderRadius: '4px', overflow: 'hidden', border: '1px solid #e0e0e0' }}>
                 <List disablePadding>
-                    <ListItem disablePadding>
+                    <ListItem disablePadding onClick={() => navigate(`/post/my/posts`)}>
                         <ListItemButton sx={{ py: 1.2 }}>
                             <ListItemIcon sx={{ minWidth: 35 }}><FormatListBulletedIcon color="primary" fontSize="small" /></ListItemIcon>
                             <ListItemText sx={{ '& .MuiTypography-root': { fontSize: '14px' } }} primary="내가 쓴 글" />
                         </ListItemButton>
                     </ListItem>
                     <Divider />
-                    <ListItem disablePadding>
+                    <ListItem disablePadding onClick={() => navigate(`/post/my/comments`)}>
                         <ListItemButton sx={{ py: 1.2 }}>
                             <ListItemIcon sx={{ minWidth: 35 }}><ChatBubbleOutlineIcon sx={{ color: '#4caf50' }} fontSize="small" /></ListItemIcon>
                             <ListItemText sx={{ '& .MuiTypography-root': { fontSize: '14px' } }} primary="댓글 단 글" />
@@ -71,7 +71,7 @@ const ProfileSideBar = () => {
                     </ListItem>
                     <Divider />
                     <ListItem disablePadding>
-                        <ListItemButton sx={{ py: 1.2 }}>
+                        <ListItemButton sx={{ py: 1.2 }} onClick={() => navigate(`/post/my/favorite`)}>
                             <ListItemIcon sx={{ minWidth: 35 }}><StarBorderIcon sx={{ color: '#ffc107' }} fontSize="small" /></ListItemIcon>
                             <ListItemText sx={{ textDecoration: 'none', '& .MuiTypography-root': { fontSize: '14px' } }} primary="내 스크랩" />
                         </ListItemButton>

@@ -1,5 +1,5 @@
 import { CustomLoginPage } from "../styles/pages/login.styles";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo1.png";
 import { object, string } from "yup";
 import { Button } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
@@ -55,7 +55,7 @@ const LoginPage = () => {
                     <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                         <div style={{display: 'flex', flexDirection: 'column'}}>
                             <div>
-                                <img src={logo} alt="Logo" style={{ height: '55px', display: 'block'}} />
+                                <img src={logo} alt="Logo" style={{ height: '90px', display: 'block'}} />
                             </div>
                         </div>
                         <form onSubmit={formik.handleSubmit} style={{display: 'flex', flexDirection: 'column', width: '400px', gap: '12px', marginTop: '2rem'}}>

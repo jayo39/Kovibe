@@ -4,7 +4,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { CustomHeader } from "../styles/components/header.styles";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo1.png";
 import { UserContext } from "../provider/userProvider";
 import EmailIcon from '@mui/icons-material/Email';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -118,7 +118,7 @@ const Header = () => {
             <div className="header-container">
                 <div className="left-section">
                     <Link to="/" style={{width: 'fit-content'}} className="logo-link">
-                        <img src={logo} alt="Logo" style={{ height: '40px', display: 'block'}} />
+                        <img src={logo} alt="Logo" style={{ height: '55px', display: 'block'}} />
                     </Link>
 
                     <div className="nav-links">

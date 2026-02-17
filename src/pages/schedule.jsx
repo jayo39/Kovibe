@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import Header from "../components/header";
 import { PageMargin } from "../styles/pages/pageMargin";
-import { Box, Typography, Dialog, DialogTitle, DialogContent, TextField, Button, MenuItem, Select, Divider } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import Footer from '../components/footer';
 import { ScheduleContainer, GridBody, GridHeader, TimeColumn, DayColumn } from '../styles/components/schedule.styles';
 import ScheduleActionsBox from '../components/scheduleActionsBox';
@@ -54,10 +54,8 @@ const SchedulePage = () => {
             setSchedules(scheduleData);
 
             if (scheduleData.length > 0) {
-                // Find the index of the schedule where is_default is 1
                 const defaultIdx = scheduleData.findIndex(s => s.is_default === 1);
                 
-                // If found, use that index; otherwise, fallback to 0
                 const initialIdx = defaultIdx !== -1 ? defaultIdx : 0;
                 
                 setActiveScheduleIdx(initialIdx);
@@ -189,7 +187,6 @@ const SchedulePage = () => {
                 await axios.delete(`/api/schedule/folder/${activeId}`);
                 setIsSettingsModalOpen(false);
                 
-                // Important: Reset index to 0 before fetching new list to avoid out-of-bounds errors
                 setActiveScheduleIdx(0); 
                 fetchScheduleList(targetId);
             } catch (err) {
@@ -215,11 +212,11 @@ const SchedulePage = () => {
                             alignItems: 'flex-start',
                             width: '100%',
                             maxWidth: '1100px', 
-                            mx: 'auto'
+                            mx: 'auto',
                         }}>
                             <Box sx={{ 
                                 flexShrink: 0,
-                                display: { xs: 'none', sm: 'block' } 
+                                display: { xs: 'none', sm: 'block' }
                             }}>
                                 <ScheduleActionsBox 
                                     gridRef={gridRef} 
@@ -229,23 +226,26 @@ const SchedulePage = () => {
                                     titleColor={sidebarTitleColor}
                                     onSettingsClick={() => setIsSettingsModalOpen(true)}
                                 />
-                                <Box sx={{ border: '1px solid #eee', borderRadius: '4px', bgcolor: '#fff', overflow: 'hidden' }}>
-                                {schedules.map((sch, idx) => (
-                                    <Box 
-                                        key={sch.id}
-                                        onClick={() => handleSelectSchedule(idx)}
-                                        sx={{ 
-                                            p: '15px 20px', 
-                                            borderBottom: '1px solid #f5f5f5', 
-                                            cursor: 'pointer',
-                                            display: 'flex',
-                                            justifyContent: 'space-between',
-                                            alignItems: 'center',
-                                            transition: '0.2s',
-                                            bgcolor: activeScheduleIdx === idx ? '#fff9f9' : 'transparent',
-                                            '&:hover': { bgcolor: '#fff9f9' }
-                                        }}
-                                    >
+                                <Box sx={{ flexGrow: '1', overflowY: 'auto', borderRight: '1px solid #eee', borderLeft: '1px solid #eee', borderTop: '1px solid #eee', borderRadius: '4px 4px 0 0', bgcolor: '#fff', maxHeight: '500px',
+                                    '&::-webkit-scrollbar': { width: '6px' },
+                                    '&::-webkit-scrollbar-thumb': { backgroundColor: '#eee', borderRadius: '10px' }
+                                 }}>
+                                    {schedules.map((sch, idx) => (
+                                        <Box 
+                                            key={sch.id}
+                                            onClick={() => handleSelectSchedule(idx)}
+                                            sx={{ 
+                                                p: '15px 20px', 
+                                                borderBottom: '1px solid #f5f5f5', 
+                                                cursor: 'pointer',
+                                                display: 'flex',
+                                                justifyContent: 'space-between',
+                                                alignItems: 'center',
+                                                transition: '0.2s',
+                                                bgcolor: activeScheduleIdx === idx ? '#fff9f9' : 'transparent',
+                                                '&:hover': { bgcolor: '#fff9f9' }
+                                            }}
+                                        >
                                         <Typography sx={{ fontWeight: 'bold', color: '#000', fontSize: '15px' }}>
                                             {sch.name}
                                         </Typography>
@@ -254,8 +254,8 @@ const SchedulePage = () => {
                                         )}
                                     </Box>
                                 ))}
-                                
-                                {isMySchedule && (
+                                </Box>
+                                    {isMySchedule && (
                                     <Box 
                                             onClick={() => setIsNewScheduleModalOpen(true)}
                                             sx={{ 
@@ -265,6 +265,10 @@ const SchedulePage = () => {
                                                 alignItems: 'center', 
                                                 gap: 1, 
                                                 color: '#f91f15',
+                                                borderRight: '1px solid #f5f5f5',
+                                                borderLeft: '1px solid #f5f5f5',
+                                                borderBottom: '1px solid #f5f5f5',
+                                                borderRadius: '0 0 4px 4px',
                                                 '&:hover': { bgcolor: '#fcfcfc' }
                                             }}
                                         >
@@ -272,7 +276,6 @@ const SchedulePage = () => {
                                             <Typography sx={{ fontWeight: 'bold', fontSize: '15px' }}>새 시간표 만들기</Typography>
                                     </Box>
                                 )}
-                                </Box>
                             </Box>
 
                             <Box sx={{ position: 'relative', minWidth: 0, width: '800px'}}>

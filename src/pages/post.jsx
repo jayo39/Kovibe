@@ -14,7 +14,6 @@ import Header from "../components/header";
 import axios from '../api/axios';
 import CategoryTitle from "../components/categoryTitle";
 import Footer from '../components/footer.jsx'
-import { UserContext } from "../provider/userProvider";
 import { faComment } from '@fortawesome/free-regular-svg-icons';
 
 const PostPage = () => {
@@ -26,7 +25,7 @@ const PostPage = () => {
     const postsPerPage = 10;
     const [refreshTrigger, setRefreshTrigger] = useState(0);
     const navigate = useNavigate();
-    const { user } = useContext(UserContext);
+    const [searchParams, setSearchParams] = useState(null);
 
 
     const handleDataRefresh = () => {
@@ -34,22 +33,39 @@ const PostPage = () => {
         setPage(1);
     };
 
-    useEffect(() => {
-        const fetchPosts = async () => {
-            try {
-                const res = await axios.get(`/api/post/category/${categoryId}?page=${page}`);
-                
-                setPosts(res.data.posts);
-                setTotalPosts(res.data.total);
-                if (res.data.categoryName) {
-                    setCategoryName(res.data.categoryName);
-                }
-            } catch (err) {
-                console.error(err);
+    const fetchPosts = async () => {
+        try {
+            let url = `/api/post/category/${categoryId}?page=${page}`;
+            
+            if (searchParams) {
+                url = `/api/post/search?categoryId=${categoryId}&type=${searchParams.type}&q=${searchParams.q}&page=${page}`;
             }
-        };
+            const res = await axios.get(url);
+            setPosts(res.data.posts);
+            setTotalPosts(res.data.total);
+            if (res.data.categoryName) setCategoryName(res.data.categoryName);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    useEffect(() => {
         fetchPosts();
-    }, [categoryId, page, refreshTrigger]);
+    }, [categoryId, page, searchParams, refreshTrigger]); 
+
+    const handleSearch = (type, q) => {
+        setPage(1);
+        if (!q || q.trim() === "") {
+            setSearchParams(null);
+        } else {
+            setSearchParams({ type, q });
+        }
+    };
+
+    useEffect(() => {
+        setSearchParams(null);
+        setPage(1);
+    }, [categoryId])
 
     const handleChange = (event, value) => {
         setPage(value);
@@ -89,7 +105,7 @@ const PostPage = () => {
                                 <PostEditor onSave={handleDataRefresh} onCancel={() => setIsWriting(false)} />
                             </div>                    )}
                         <div style={{display: 'flex', justifyContent: 'end'}}>  
-                            <SearchBar></SearchBar>
+                            <SearchBar onSearch={handleSearch}></SearchBar>
                         </div>
                         <TableContainer component={Paper} style={{boxShadow: 'none', border: '1px solid #e0e0e0' }}>
                             <Table aria-label="post table">

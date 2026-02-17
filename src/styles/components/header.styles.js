@@ -8,7 +8,7 @@ export const CustomHeader = styled.header`
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
     width: 100%;
-    padding: 20px;
+    padding: 15px;
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -32,7 +32,6 @@ export const CustomHeader = styled.header`
         display: flex;
         align-items: center;
         column-gap: 10px;
-        margin-left: 10px;
     }
 
     .right-section {

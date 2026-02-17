@@ -141,7 +141,8 @@ router.get('/:categoryId/:postId', async (req, res) => {
     try {
         const [postRows] = await pool.query(`
             SELECT p.*, c.name as categoryName,
-            CASE WHEN p.isAnonymous = 1 THEN '익명(글쓴이)' ELSE u.name END as author,
+            p.isAnonymous as isAnonymous,
+            CASE WHEN p.isAnonymous = 1 THEN '익명' ELSE u.name END as author,
             (SELECT COUNT(*) FROM post_likes WHERE post_id = p.id) as like_count,
             (SELECT COUNT(*) FROM saved_posts WHERE post_id = p.id) as scrap_count,
             EXISTS(SELECT 1 FROM post_likes WHERE post_id = p.id AND user_id = ?) as isLiked,
@@ -388,6 +389,45 @@ router.get('/commented', loginRequired, async (req, res) => {
         `, [userId]);
         res.json(posts);
     } catch (err) { res.status(500).json(err); }
+});
+
+router.get('/search', async (req, res) => {
+    const { categoryId, type, q, page } = req.query;
+    const limit = 10;
+    const offset = (parseInt(page) - 1) * limit;
+    const searchTerm = `%${q}%`;
+
+    let whereClause = "WHERE category_id = ?";
+    let params = [categoryId];
+
+    if (type === 'title') {
+        whereClause += " AND title LIKE ?";
+        params.push(searchTerm);
+    } else if (type === 'content') {
+        whereClause += " AND content LIKE ?";
+        params.push(searchTerm);
+    } else {
+        whereClause += " AND (title LIKE ? OR content LIKE ?)";
+        params.push(searchTerm, searchTerm);
+    }
+
+    try {
+        const [posts] = await pool.query(
+            `SELECT p.*, u.name as author FROM posts p 
+             JOIN users u ON p.user_id = u.id 
+             ${whereClause} ORDER BY created_at DESC LIMIT ? OFFSET ?`,
+            [...params, limit, offset]
+        );
+
+        const [count] = await pool.query(
+            `SELECT COUNT(*) as total FROM posts ${whereClause}`,
+            params
+        );
+
+        res.json({ posts, total: count[0].total });
+    } catch (err) {
+        res.status(500).json({ msg: "Search error" });
+    }
 });
 
 export default router;

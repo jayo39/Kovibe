@@ -14,6 +14,24 @@ const PostEditor = ({initialData, onSave, onCancel, isEditMode}) => {
     const [content, setContent] = useState("");
     const [isAnonymous, setIsAnonymous] = useState(false);
 
+    const communityRules = `누구나 기분 좋게 참여할 수 있는 커뮤니티를 만들기 위해 아래의 규칙을 꼭 지켜주세요.
+
+위반 시 게시글 삭제, 이용 제한 또는 강제 탈퇴 등의 조치가 이루어질 수 있습니다.
+
+※ 정치 및 사회 이슈와 관련된 게시글·댓글·분쟁 유발 행위 금지
+- 정치인 비하 및 찬양, 정치인에 대한 개인적 감정 표출
+- 사회적 갈등 조장, 비난을 유발하는 게시글이나 댓글
+- 뉴스 링크 후 유도 심문, 정치 뉴스를 가져와서 논쟁을 유도하는 행위
+- 정치적 은어 사용, 정치적 비하 용어나 멸칭 사용
+
+※ 홍보, 광고, 판매, 공동구매 모집 등 상업적 목적의 활동 금지
+- 바이럴 마케팅(뒷광고)
+- 중고 거래 및 직거래 유도
+- 단톡방/오픈채팅 초대
+- 개인 채널 홍보
+
+※ 불법촬영물 및 그에 준하는 불법·유해 콘텐츠의 게시 및 유통은 엄격히 금지되며, 적발 시 관련 법령에 따라 조치될 수 있습니다.`;
+
     useEffect(() => {
         if (isEditMode && initialData) {
             setTitle(initialData.title);
@@ -64,7 +82,7 @@ return (
             />
             <textarea 
                 className="content-input" 
-                placeholder="누구나 기분 좋게 참여할 수 있는 커뮤니티를 만들기 위해..." 
+                placeholder={communityRules}
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
             />

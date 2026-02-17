@@ -20,9 +20,10 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import SubdirectoryArrowRightIcon from '@mui/icons-material/SubdirectoryArrowRight';
 import { CommentItem, CommentListContainer } from '../styles/components/comment.styles';
 import Footer from '../components/footer.jsx'
-import StarIcon from '@mui/icons-material/Star'; // Add this import at the top
+import StarIcon from '@mui/icons-material/Star';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment } from '@fortawesome/free-regular-svg-icons';
+import MessageModal from '../components/messageModal.jsx';
 
 const PostSinglePage = () => {
     const { categoryId, postId } = useParams();
@@ -37,6 +38,7 @@ const PostSinglePage = () => {
     const [replyText, setReplyText] = useState("");
     const [replyAnonymous, setReplyAnonymous] = useState(false);
 
+    const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
 
     const fetchPostDetail = async () => {
         try {
@@ -123,11 +125,11 @@ const PostSinglePage = () => {
                 content: replyText,
                 userId: user.id,
                 isAnonymous: replyAnonymous ? 1 : 0,
-                parentId: parentId // Send the parent ID to the backend
+                parentId: parentId 
             });
             
             setReplyText("");
-            setReplyingTo(null); // Close the reply input
+            setReplyingTo(null); 
             fetchPostDetail();
         } catch (err) {
             alert("대댓글 작성에 실패했습니다.");
@@ -224,7 +226,7 @@ const PostSinglePage = () => {
                                 <div className="post-header">
                                     <AccountCircleIcon className="profile-icon" />
                                     <div className="author-info">
-                                        <div className="name">{post?.author}</div>
+                                        <div className="name">{post?.author}{post?.isAnonymous === 1 && isAuthor && " (글쓴이)"}</div>
                                         <div className="date">{new Date(post?.created_at).toLocaleString()}</div>
                                     </div>
                                     <div className="post-actions">
@@ -235,7 +237,7 @@ const PostSinglePage = () => {
                                             </>
                                         ) : (
                                             <>
-                                                <span>쪽지</span>
+                                                <span onClick={() => setIsMessageModalOpen(true)}>쪽지</span>
                                                 <span>신고</span>
                                             </>
                                         )}
@@ -264,7 +266,7 @@ const PostSinglePage = () => {
                                     <button 
                                         className={`action-btn ${post?.isScrapped ? 'active' : ''}`}
                                         onClick={handleScrap}
-                                        style={{ color: post?.isScrapped ? '#ffbb00' : 'inherit' }} // Yellow color for scraps
+                                        style={{ color: post?.isScrapped ? '#ffbb00' : 'inherit' }}
                                     >
                                         {post?.isScrapped ? <StarIcon fontSize="small" /> : <StarBorderIcon fontSize="small" />} 
                                         스크랩
@@ -300,7 +302,7 @@ const PostSinglePage = () => {
                                                             {isCommentAuthor ? (
                                                                 <span onClick={() => handleCommentDelete(comment.id)} style={{ cursor: 'pointer' }}>삭제</span>
                                                             ) : (
-                                                                <><span>쪽지</span><span>신고</span></>
+                                                                <><span onClick={() => setIsMessageModalOpen(true)}>쪽지</span><span>신고</span></>
                                                             )}
                                                         </div>
                                                     </div>
@@ -351,6 +353,15 @@ const PostSinglePage = () => {
                     </CustomPostPage>
                     <PostSideBar />
                 </div>
+
+                <MessageModal 
+                    open={isMessageModalOpen} 
+                    onClose={() => setIsMessageModalOpen(false)} 
+                    receiverId={post?.user_id}
+                    user={user}
+                    isAnonymous={post?.isAnonymous}
+                />
+
             </PageMargin>
             <Footer></Footer>
         </>

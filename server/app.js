@@ -5,6 +5,7 @@ import categoryRouter from './routers/categoryRouter.js';
 import postRouter from './routers/postRouter.js';
 import scheduleRouter from './routers/scheduleRouter.js';
 import friendRouter from './routers/friendRouter.js';
+import chatRouter from './routers/chatRouter.js';
 
 const app = express();
 const PORT = 5001;
@@ -17,6 +18,7 @@ app.use('/api/category', categoryRouter);
 app.use('/api/post', postRouter);
 app.use('/api/schedule', scheduleRouter);
 app.use('/api/friend', friendRouter);
+app.use('/api/chat', chatRouter);
 
 app.get('/', (req, res) => {
     res.send('Kovibe Backend Running!');

@@ -38,8 +38,8 @@ const PostSideBar = () => {
             <TableCell>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                     <Typography sx={{ fontSize: '13px', fontWeight: 600, color: '#333' }}>
-                        {post.title.length > 20 
-                            ? `${post.title.slice(0, 20)}...` 
+                        {post.title.length > 15 
+                            ? `${post.title.slice(0, 15)}...` 
                             : post.title}
                     </Typography>
 

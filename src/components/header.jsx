@@ -4,7 +4,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { CustomHeader } from "../styles/components/header.styles";
-import logo from "../assets/logo1.png";
+import logo from "../assets/logo.png";
 import { UserContext } from "../provider/userProvider";
 import EmailIcon from '@mui/icons-material/Email';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -30,6 +30,8 @@ const Header = () => {
 
     const [pendingRequests, setPendingRequests] = useState([]);
     const [notifAnchorEl, setNotifAnchorEl] = useState(null);
+
+    const [unreadMessages, setUnreadMessages] = useState(0);
 
     const allMenus = [
         { id: 1, title: '관리자 메뉴', path: '/admin', adminOnly: true, authRequired: true},
@@ -74,7 +76,7 @@ const Header = () => {
                 });
                 setPendingRequests(res.data);
             } catch (err) {
-                console.error("Failed to fetch notifications", err);
+                console.error("알림 불러오기 실패", err);
             }
         };
 
@@ -82,6 +84,33 @@ const Header = () => {
         const interval = setInterval(fetchPending, 30000);
         return () => clearInterval(interval);
     }, [user, authLoading]);
+
+    useEffect(() => {
+        const fetchUnreadCount = async () => {
+            if (authLoading || !isLoggedIn) return;
+            const token = user?.accessToken || localStorage.getItem('accessToken');
+            if (!token) return;
+
+            try {
+                const res = await axios.get("/api/chat/unread-count", {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                setUnreadMessages(res.data.count);
+            } catch (err) {
+                console.error("쪽지 알림 불러오기 실패", err);
+            }
+        };
+
+        fetchUnreadCount();
+
+        window.addEventListener("messageRead", fetchUnreadCount)
+
+        const interval = setInterval(fetchUnreadCount, 30000);
+        return () => {
+            clearInterval(interval);
+            window.removeEventListener("messageRead", fetchUnreadCount);
+        }
+    }, [user, authLoading, isLoggedIn]);
 
     const handleRespond = async (requesterId, action) => {
         const token = user?.accessToken || localStorage.getItem('accessToken');
@@ -118,7 +147,7 @@ const Header = () => {
             <div className="header-container">
                 <div className="left-section">
                     <Link to="/" style={{width: 'fit-content'}} className="logo-link">
-                        <img src={logo} alt="Logo" style={{ height: '55px', display: 'block'}} />
+                        <img src={logo} alt="Logo" style={{ height: '35px', display: 'block'}} />
                     </Link>
 
                     <div className="nav-links">
@@ -161,7 +190,9 @@ const Header = () => {
                         ) : (
                             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                                 <IconButton style={{ padding: '8px' }} component={Link} to="/message">
-                                    <EmailIcon style={{ fontSize: '28px', color: '#666' }} />
+                                    <Badge badgeContent={unreadMessages} color="error">
+                                        <EmailIcon style={{ fontSize: '28px', color: '#666' }} />
+                                    </Badge>
                                 </IconButton>
 
                                 <IconButton onClick={handleOpenNotif} style={{ padding: '8px' }}>

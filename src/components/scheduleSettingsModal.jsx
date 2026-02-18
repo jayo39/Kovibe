@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, Dialog, DialogTitle, DialogContent, TextField, Button, MenuItem, Select, Divider } from '@mui/material';
 
-const ScheduleSettingsModal = ({ open, onClose, onSave, onDelete, initialData }) => {
+const ScheduleSettingsModal = ({ open, onClose, onSave, onDelete, initialData, onCopy }) => {
     const [name, setName] = useState(initialData?.name || "");
     const [privacy, setPrivacy] = useState(initialData?.privacy || "me");
     const [isDefault, setIsDefault] = useState(!!initialData?.is_default);
@@ -47,6 +47,22 @@ const ScheduleSettingsModal = ({ open, onClose, onSave, onDelete, initialData })
                         disableElevation
                     >
                         저장하기
+                    </Button>
+
+                    
+
+                    <Button 
+                        variant="outlined"
+                        fullWidth
+                        sx={{ 
+                            color: '#555', 
+                            borderColor: '#ddd', 
+                            fontWeight: 'bold',
+                            '&:hover': { borderColor: '#bbb', bgcolor: '#f5f5f5' } 
+                        }}
+                        onClick={onCopy}
+                    >
+                        이 시간표 복사하기
                     </Button>
 
                     <Divider />

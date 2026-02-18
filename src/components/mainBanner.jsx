@@ -13,7 +13,7 @@ const MainBanner = () => {
             
             <p style={{ color: '#848a92', fontWeight: 'bold', fontSize: '1.25rem', marginTop: '-20px' }}>
                 대학생활의 다양한 정보와 이야기를 <span className="mobile-br" /> 
-                다른 학생들과 자유롭게 나눠보세요.
+                자유롭게 나눠보세요.
                 <br className="desktop-br" />
                 <span className="mobile-br" />
                 대학생을 위해, 대학생이 만든 플랫폼.

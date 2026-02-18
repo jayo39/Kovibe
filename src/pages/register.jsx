@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 
 
 const registerSchema = object({
+    school: string().required('필수 항목입니다'),
     name: string().required('필수 항목입니다'),
     email: string().required('필수 항목입니다').email('올바른 이메일 형식이 아닙니다'),
     username: string().required('필수 항목입니다').max(30, '아이디는 30글자 이하여야 합니다.'),
@@ -98,10 +99,11 @@ const RegisterPage = () => {
                                     displayEmpty
                                     value={formik.values.school}
                                     onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
                                     MenuProps={{disableScrollLock: true}}
                                     renderValue={(selected) => {
                                         if (selected.length === 0) {
-                                            return <span style={{ color: '#9ca3af' }}>학교를 선택해주세요</span>;
+                                            return <span style={{ color: '#9ca3af' }}>*학교를 선택해주세요</span>;
                                         }
                                         const selectedSchool = schools.find((s) => s.id === selected);
                                         return selectedSchool ? selectedSchool.name : selected;
@@ -128,6 +130,11 @@ const RegisterPage = () => {
                                     ))}
                                 </Select>
                             </FormControl>
+                            {formik.touched.school && formik.errors.school && (
+                                <div style={{color: 'red', fontSize: '14px', fontWeight: '500'}}>
+                                    *{formik.errors.school}
+                                </div>
+                            )}
                             <input name="name" placeholder="*이름" value={formik.values.name} onChange={formik.handleChange} onBlur={formik.handleBlur}></input>
                             {formik.touched.name && formik.errors.name && <div style={{color: 'red', fontSize: '14px', fontWeight: '500'}}>*{formik.errors.name}</div>}
                             <input name="email" placeholder="*이메일" value={formik.values.email} onChange={formik.handleChange} onBlur={formik.handleBlur}></input>

@@ -4,7 +4,7 @@ const FooterLinks = () => {
     const menus = [
         {id: 1, title: '공지사항'},
         {id: 2, title: '문의하기'},
-        {id: 3, title: '이용규칙'},
+        {id: 3, title: '이용약관'},
         {id: 4, title: '개인정보처리방침'}
     ];
 
@@ -16,7 +16,7 @@ const FooterLinks = () => {
                         <div key={el.id} style={{ display: 'flex', alignItems: 'center' }}>
                             <Link 
                                 style={{ textDecoration: 'none', color: '#737373', fontSize: '13px' }} 
-                                to={el.id === 1 ? '/news' : el.id === 2 ? '/' : '/privacy'}
+                                to={el.id === 1 ? '/news' : el.id === 2 ? '/faq' : el.id === 3 ? '/tos' : '/privacy'}
                             >
                                 {el.title}
                             </Link>

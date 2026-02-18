@@ -18,6 +18,8 @@ import GPAPage from './pages/gpa.jsx';
 import PostPersonalPage from './pages/postPersonal.jsx';
 import InvalidPage from './pages/invalid.jsx';
 import PrivacyPage from './pages/privacy.jsx';
+import TermsPage from './pages/tos.jsx';
+import InfoPage from './pages/info.jsx';
 
 const ProtectedSchedule = withLogin(SchedulePage);
 const ProtectedFriend = withLogin(FriendPage);
@@ -32,9 +34,11 @@ const ProtectedAdmin = withLoginAndAdmin(AdminPage);
 
 const router = createBrowserRouter([
   {path: "/", element: <App/>},
+  {path: "/tos", element: <TermsPage/>},
+  {path: "/privacy", element: <PrivacyPage/>},
   {path: "/login", element: <LoginPage/>},
   {path: "/register", element: <RegisterPage/>},
-  {path: "/privacy", element: <PrivacyPage/>},
+  {path: "/info", element: <InfoPage/>},
   {path: "/schedule/:userId?", element: <ProtectedSchedule/>},
   {path: "/friend", element: <ProtectedFriend/>},
   {path: "/profile", element: <ProtectedProfile/>},

@@ -190,4 +190,54 @@ router.delete('/folder/:id', loginRequired, async (req, res) => {
     }
 });
 
+router.post('/folder/copy/:id', loginRequired, async (req, res) => {
+    const originalScheduleId = req.params.id;
+    const userId = req.loginId;
+    const connection = await pool.getConnection();
+
+    try {
+        await connection.beginTransaction();
+
+        const [original] = await connection.query(
+            'SELECT name, privacy FROM schedules WHERE id = ? AND user_id = ?', 
+            [originalScheduleId, userId]
+        );
+
+        if (original.length === 0) {
+            await connection.rollback();
+            return res.status(403).json({ error: "권한이 없거나 존재하지 않는 시간표입니다." });
+        }
+
+        const newName = `${original[0].name} 복사본`;
+        const privacy = original[0].privacy;
+
+        const [newScheduleResult] = await connection.query(
+            'INSERT INTO schedules (user_id, name, privacy, is_default) VALUES (?, ?, ?, 0)',
+            [userId, newName, privacy]
+        );
+        const newScheduleId = newScheduleResult.insertId;
+
+        const copyItemsSql = `
+            INSERT INTO schedule_items (schedule_id, name, location, day, start_time, end_time, color)
+            SELECT ?, name, location, day, start_time, end_time, color 
+            FROM schedule_items 
+            WHERE schedule_id = ?
+        `;
+        await connection.query(copyItemsSql, [newScheduleId, originalScheduleId]);
+
+        await connection.commit();
+        res.status(200).json({ 
+            id: newScheduleId, 
+            msg: "시간표가 복사되었습니다." 
+        });
+
+    } catch (err) {
+        await connection.rollback();
+        console.error("Copy Error:", err);
+        res.status(500).json({ error: "복사 중 오류가 발생했습니다." });
+    } finally {
+        connection.release();
+    }
+});
+
 export default router;

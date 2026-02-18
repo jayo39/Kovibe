@@ -51,10 +51,20 @@ const ScheduleActionsBox = ({ scheduleTitle, titleColor, gridRef, courses, isMyS
             display: 'inline-block',
             mb: 1,
             backgroundColor: '#fff',
-            minWidth: '180px'
+            minWidth: '200px'
         }}>
-            <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 0.5, color: titleColor || '#000' }}>
-                {scheduleTitle}
+            <Typography 
+                variant="h6" 
+                title={scheduleTitle}
+                sx={{ 
+                    fontWeight: 'bold', 
+                    mb: 0.5, 
+                    color: titleColor || '#000' 
+                }}
+            >
+                {scheduleTitle?.length > 15 
+                    ? `${scheduleTitle.substring(0, 15)}...` 
+                    : scheduleTitle}
             </Typography>
             <Typography variant="caption" sx={{ color: '#aaa', display: 'block', mb: 2 }}>
                 {getLatestDate()}

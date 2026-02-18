@@ -87,6 +87,21 @@ const SchedulePage = () => {
         }
     };
 
+    const handleCopySchedule = async () => {
+        const currentSchedule = schedules[activeScheduleIdx];
+
+        if (!currentSchedule?.id) return;
+        
+        try {
+            const res = await axios.post(`/api/schedule/folder/copy/${currentSchedule.id}`);
+            alert(res.data.msg);
+            
+            window.location.reload(); 
+        } catch (err) {
+            alert("복사 실패: " + err.response?.data?.error);
+        }
+    };
+
     useEffect(() => {
         if (authLoading) return;
         if (targetId) fetchScheduleList(targetId);
@@ -247,7 +262,9 @@ const SchedulePage = () => {
                                             }}
                                         >
                                         <Typography sx={{ fontWeight: 'bold', color: '#000', fontSize: '15px' }}>
-                                            {sch.name}
+                                            {sch.name.length > 15 
+                                                ? `${sch.name.substring(0, 15)}...` 
+                                                : sch.name}
                                         </Typography>
                                         {(sch.is_default === 1 || sch.is_default === true) && (
                                             <Typography sx={{ fontSize: '12px', color: '#bbb' }}>기본시간표</Typography>
@@ -369,6 +386,7 @@ const SchedulePage = () => {
                             open={isSettingsModalOpen}
                             onClose={() => setIsSettingsModalOpen(false)}
                             onSave={handleUpdateSchedule}
+                            onCopy={handleCopySchedule}
                             initialData={schedules[activeScheduleIdx]}
                             onDelete={handleDeleteFolder}
                         />

@@ -3,34 +3,71 @@ import pool from '../db.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import {loginRequired} from '../lib/utils.js';
+import multer from 'multer';
+import path from 'path';
 
 const router = express.Router();
 
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/verification/');
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, uniqueSuffix + path.extname(file.originalname));
+    }
+});
+const upload = multer({ storage: storage })
+
 // 회원가입
-router.post('/register', async(req, res) => {
+// 회원가입
+router.post('/register', upload.single('idCardFile'), async(req, res) => {
     try {
+        const { 
+            username, 
+            email, 
+            pw, 
+            name, 
+            school, 
+            tos,       
+            privacy,   
+            marketing
+        } = req.body;
+        
+        const idCardPath = req.file ? req.file.path : null;
+
         // 중복 아이디 확인
         let sql = `SELECT username FROM users WHERE username = ?`;
-        let [usernames] = await pool.query(sql, [req.body.username]);
+        let [usernames] = await pool.query(sql, [username]);
         if(usernames.length > 0) {
-            res.status(400).json({errno: 1, msg: '이미 존재하는 아이디입니다.'});
-            return;
+            return res.status(400).json({errno: 1, msg: '이미 존재하는 아이디입니다.'});
         }
 
         // 중복 이메일 확인
         sql = `SELECT email FROM users WHERE email = ?`;
-        let [emails] = await pool.query(sql, [req.body.email]);
+        let [emails] = await pool.query(sql, [email]);
         if(emails.length > 0) {
-            res.status(400).json({errno: 2, msg: '이미 사용 중인 이메일입니다.'});
-            return;
+            return res.status(400).json({errno: 2, msg: '이미 사용 중인 이메일입니다.'});
         }
 
         // 비밀번호 암호화
-        const encryptPw = bcrypt.hashSync(req.body.pw, 10);
+        const encryptPw = bcrypt.hashSync(pw, 10);
 
-        sql = `INSERT INTO users (username, password, name, role, email, school_id) VALUES (?, ?, ?, 'MEMBER', ?, ?)`;
+        sql = `INSERT INTO users 
+               (username, password, name, role, email, school_id, id_card_path, tos_agree, privacy_agree, marketing_agree) 
+               VALUES (?, ?, ?, 'MEMBER', ?, ?, ?, ?, ?, ?)`;
 
-        await pool.query(sql, [req.body.username, encryptPw, req.body.name, req.body.email, req.body.school])
+        await pool.query(sql, [
+            username, 
+            encryptPw, 
+            name, 
+            email, 
+            school, 
+            idCardPath,
+            tos ? 1 : 0,
+            privacy ? 1 : 0,
+            marketing ? 1 : 0 
+        ]);
 
         res.status(200).json({msg: '회원가입이 완료되었습니다.'});
     } catch(err) {

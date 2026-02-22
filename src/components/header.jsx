@@ -183,7 +183,7 @@ const Header = () => {
                                 <Link to='/login'>
                                     <Button variant="contained" style={{backgroundColor: '#f91f15'}} disableElevation>로그인</Button>
                                 </Link>
-                                <Link to='/register'>
+                                <Link to='/register1'>
                                     <Button variant="outlined" disableElevation>회원가입</Button>
                                 </Link>
                             </>

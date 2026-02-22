@@ -16,7 +16,7 @@ const TermsPage = () => {
     <>
       <Header />
       <PageMargin>
-        <Container maxWidth="md" sx={{ mt: 5 }}>
+        <Container maxWidth="md" sx={{ mt: 5, userSelect: 'none' }}>
             <Paper 
                 elevation={0} 
                 sx={{ 
@@ -189,7 +189,7 @@ const TermsPage = () => {
                 {/* 금지행위 */}
                 <Box>
                     <Typography sx={{ fontWeight: 700, fontSize: '18px', mb: 1.5 }}>
-                        제7조(금지행위)
+                        제7조(금지 행위)
                     </Typography>
                     <Typography sx={{ fontSize: '15px'}}>
                         1. 이용자는 다음과 같은 행위를 해서는 안됩니다.

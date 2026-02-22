@@ -3,7 +3,9 @@ import PostSideBar from "../components/postSideBar";
 import PostCategory from "../components/postCategory";
 import Carousel from "../components/carousel";
 import { Box } from '@mui/material';
-import banner1 from "../assets/ads/adbanner1.png";
+import banner1 from "../assets/ads/adBannerPlaceholder.png";
+import banner2 from "../assets/ads/adBannerPlaceholder.png";
+import banner3 from "../assets/ads/adBannerPlaceholder.png";
 import ProfileSideBar from "../components/profileSideBar";
 import { useEffect, useState } from 'react';
 import axios from '../api/axios';
@@ -29,11 +31,11 @@ const MainPage = () => {
                 
                 <ProfileSideBar />
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '25px', flex: 1 }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '25px', flex: 1, maxWidth: '600px' }}>
                     <Carousel items={[
-                        <img src={banner1} style={{ width: '100%', height: 'auto', maxHeight: '200px', objectFit: 'cover', display: 'block' }} alt="banner" />,
-                        <Box sx={{ height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: '#eee' }}>Custom Slide 2</Box>,
-                        <Box sx={{ height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: '#eee' }}>Custom Slide 3</Box>
+                        <img src={banner1} style={{ width: '100%', height: '200px', objectFit: 'contain', display: 'block' }} alt="banner" />,
+                        <img src={banner2} style={{ width: '100%', height: '200px', objectFit: 'contain', display: 'block' }} alt="banner" />,
+                        <img src={banner3} style={{ width: '100%', height: '200px', objectFit: 'contain', display: 'block' }} alt="banner" />
                     ]} />
 
                     <div style={{ 

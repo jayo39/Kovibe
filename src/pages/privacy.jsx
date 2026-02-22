@@ -16,7 +16,7 @@ const PrivacyPage = () => {
         <>
             <Header></Header>
             <PageMargin>
-                <Container maxWidth="md" sx={{ mt: 5 }}>
+                <Container maxWidth="md" sx={{ mt: 5, userSelect: 'none' }}>
                     <Paper 
                         elevation={0} 
                         sx={{ 

@@ -17,7 +17,7 @@ const Carousel = ({ items = [] }) => {
     if (!items.length) return <Box>No items to display</Box>;
 
     return (
-        <Box sx={{ position: 'relative', width: '100%', overflow: 'hidden', borderRadius: '8px' }}>
+        <Box sx={{ position: 'relative', width: '100%', overflow: 'hidden', borderRadius: '4px' }}>
             <Box
                 sx={{
                     display: 'flex',

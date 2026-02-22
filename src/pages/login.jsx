@@ -66,7 +66,7 @@ const LoginPage = () => {
 
                                 <Button type="submit" style={{borderRadius: '15px', backgroundColor: '#f91f15', color: '#fff', width: '100%', height: '54px'}}>코바이브 로그인</Button>
 
-                                <Link to="/register">
+                                <Link to="/register1">
                                     <Button variant="outlined" style={{borderRadius: '15px', borderColor: '#ededed', color: '#737373', width: '100%', height: '54px'}}>회원가입</Button>
                                 </Link>
 

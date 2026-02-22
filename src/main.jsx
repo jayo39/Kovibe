@@ -4,7 +4,9 @@ import {RouterProvider, createBrowserRouter} from "react-router-dom";
 import './index.css'
 import App from './App.jsx'
 import LoginPage from './pages/login.jsx';
-import RegisterPage from './pages/register.jsx';
+import RegisterPage1 from './pages/register1.jsx';
+import RegisterPage2 from './pages/register2.jsx';
+import RegisterPage3 from './pages/register3.jsx';
 import UserProvider from './provider/userProvider.jsx';
 import SchedulePage from './pages/schedule.jsx';
 import FriendPage from './pages/friend.jsx';
@@ -37,7 +39,9 @@ const router = createBrowserRouter([
   {path: "/tos", element: <TermsPage/>},
   {path: "/privacy", element: <PrivacyPage/>},
   {path: "/login", element: <LoginPage/>},
-  {path: "/register", element: <RegisterPage/>},
+  {path: "/register1", element: <RegisterPage1/>},
+  {path: "/register2", element: <RegisterPage2/>},
+  {path: "/register3", element: <RegisterPage3/>},
   {path: "/info", element: <InfoPage/>},
   {path: "/schedule/:userId?", element: <ProtectedSchedule/>},
   {path: "/friend", element: <ProtectedFriend/>},

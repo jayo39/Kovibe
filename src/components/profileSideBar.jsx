@@ -7,8 +7,8 @@ import { ProfileSidebarContainer } from "../styles/components/profileSideBar.js"
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import { useNavigate, Link } from "react-router-dom"; 
 import { UserContext } from "../provider/userProvider";
-import smallAd1 from "../assets/ads/ad1.png";
-import smallAd2 from "../assets/ads/ad2.png";
+import smallAd1 from "../assets/ads/adCardPlaceholder.png";
+import smallAd2 from "../assets/ads/adCardPlaceholder.png";
 
 const ProfileSideBar = () => {
     const navigate = useNavigate();

@@ -17,6 +17,7 @@ const MessagePage = () => {
     const [loading, setLoading] = useState(true);
     const { user } = useContext(UserContext);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isRefreshing, setIsRefreshing] = useState(false);
 
     const [isActionModalOpen, setIsActionModalOpen] = useState(false);
 
@@ -31,6 +32,16 @@ const MessagePage = () => {
         const minutes = String(date.getMinutes()).padStart(2, '0');
         
         return `${year}/${month}/${day} ${hours}:${minutes}`;
+    };
+
+    const handleManualRefresh = async () => {
+        if (!activeRoomId) return;
+        setIsRefreshing(true);
+        try {
+            await Promise.all([fetchMessages(), fetchRooms()]);
+        } finally {
+            setIsRefreshing(false);
+        }
     };
 
     const handleRoomAction = async (actionType) => {
@@ -187,7 +198,17 @@ const MessagePage = () => {
                             </Typography>
                             <Box sx={{ display: 'flex', gap: 1 }}>
                                 <IconButton size="small" disabled={!activeRoom} onClick={() => setIsModalOpen(true)}><FontAwesomeIcon icon={faPaperPlane} style={{ color: '#e53935' }}  /></IconButton>
-                                <IconButton size="small"><FontAwesomeIcon icon={faSyncAlt} style={{ color: '#e53935' }} /></IconButton>
+                                <IconButton 
+                                    size="small" 
+                                    disabled={!activeRoom || isRefreshing} 
+                                    onClick={handleManualRefresh}
+                                >
+                                    <FontAwesomeIcon 
+                                        icon={faSyncAlt} 
+                                        style={{ color: '#e53935' }} 
+                                        spin={isRefreshing}
+                                    />
+                                </IconButton>
                                 <IconButton size="small" disabled={!activeRoom} onClick={() => setIsActionModalOpen(true)}><FontAwesomeIcon icon={faEllipsisV} style={{ color: '#e53935' }} /></IconButton>
                             </Box>
                         </Box>
